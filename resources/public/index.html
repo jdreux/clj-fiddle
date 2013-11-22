@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="/js/codemirror-3.19/theme/paraiso-light.css"></link>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="navbar navbar-inverse navbar-static-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
 
-          <a class="navbar-brand" href="#">clj-fiddle</a>
+          <a class="navbar-brand" href="#">(clj-fiddle)</a>
 
 
           
@@ -60,14 +60,17 @@
                 value: initial,
                 mode: 'clojure',
                 theme: 'paraiso-light',
-                lineNumbers: true
+                lineNumbers: true,
+                autofocus: true
             });
 
             var result = CodeMirror($('#result-container')[0], {
                 value: '',
                 mode: 'clojure',
                 theme: 'paraiso-dark',
-                lineNumbers: true
+                // lineNumbers: true,
+                readOnly: true,
+                lineWrapping: true
             });
 
             $('button#run').click(function (){
@@ -107,13 +110,21 @@
                 }
             });
 
-            $('div#separator').on('mousedown', function(e){
+            // $('div#separator').on('mousedown', function(e){
+            //     var //w = $(this).outerWidth(),
+            //         h = $(this).outerHeight();
+            //     $(this).on('mousemove', function(e){
+            //         //console.log(e.pageX, e.pageY);
+            //         $(this).offset({
+            //             top: e.pageY - h / 2,
+            //             //left: e.pageX - w / 2,
+            //         })
+            //     });
+            // }); 
 
-            });
-
-            $('div#separator').on('mouseup', function(e){
-                $('div#separator').off('mousedown')
-            });            
+            // $('div#separator').on('mouseup', function(e){
+            //     $('div#separator').off('mousemove');
+            // });            
         }            
 
         if(document.location.hash){

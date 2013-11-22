@@ -2,7 +2,14 @@ html,
 body {
 	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     height: 100%;
-    padding-top: 25px;
+}
+
+.navbar {
+	margin-bottom: 0px;
+}
+
+a.navbar-brand {
+	font-family: "Lucida Console", Monaco, monospace;
 }
 
 button {
@@ -12,15 +19,25 @@ margin-right: 15px;
 margin-bottom: 8px;
 }
 
+#code-container .CodeMirror{
+	height: 80%;
+}
+
+#result-container .CodeMirror{
+	height: 10%;
+	/*position: absolute;
+	bottom: 0px;*/
+}
 
 
 #separator {
 	height: 12px;
-	cursor: row-resize;
+	/*cursor: row-resize;*/
 	padding: 1px;
-	background: url(http://jsfiddle.net/img/handle-h.png) 50% 3px no-repeat;
+	/*background: url(http://jsfiddle.net/img/handle-h.png) 50% 3px no-repeat;*/
 	border-top: 1px solid #ccc;
 	border-bottom: 1px solid #ccc;
+	background-color: #ccc;
 }
 
 .error {
