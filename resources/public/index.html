@@ -1,8 +1,135 @@
 <html>
-    <head></head>
-    <body>
-        <div>
+<head>
+    <title>Clojure Fiddle</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"></link>
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css"></link>
+    <link rel="stylesheet" href="/css/screen.css"></link>
+    <link rel="stylesheet" href="/js/codemirror-3.19/lib/codemirror.css"></link>
+    <link rel="stylesheet" href="/js/codemirror-3.19/theme/paraiso-light.css"></link>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+
+          <a class="navbar-brand" href="#">clj-fiddle</a>
+
+
+          
 
         </div>
-    </body>
+
+        <button id="save" type="button" class="btn btn-default btn-sm" style="float:right">
+            <span class="glyphicon glyphicon-save"></span> Save
+          </button>
+
+        <button id="run" type="button" class="btn btn-default btn-sm" style="float:right">
+            <span class="glyphicon glyphicon-play"></span> Run
+        </button>
+        
+
+      </div>
+    </div>
+    <div class="">
+        <div id="code-container"></div>
+        <div id="separator"></div>
+        <div id="result-container"></div>
+    </div>
+
+    <script type="text/javascript" src="/js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/codemirror-3.19/lib/codemirror.js"></script>
+    <script type="text/javascript" src="/js/codemirror-3.19/mode/clojure/clojure.js"></script>
+
+    <script>
+
+    var request = function(method, url, data) {
+        return $.ajax({
+            type: method,
+            url: url,
+            data: data?JSON.stringify(data):undefined,
+            contentType: 'application/json',
+            dataType: 'json'
+        });
+    }
+
+    $(document).ready(function(){
+
+        function editors(initial){
+            var code = CodeMirror($('#code-container')[0], {
+                value: initial,
+                mode: 'clojure',
+                theme: 'paraiso-light',
+                lineNumbers: true
+            });
+
+            var result = CodeMirror($('#result-container')[0], {
+                value: '',
+                mode: 'clojure',
+                theme: 'paraiso-dark',
+                lineNumbers: true
+            });
+
+            $('button#run').click(function (){
+                request('post', '/api/eval', {code: code.getValue()}).then(function (data){
+                    console.log("success", data);
+                    result.setValue(data.result || 'nil');
+                }).fail(function (err){
+                    console.log("failure",err);
+                })
+            }).click();
+
+            $('button#save').click(function(){
+                var data = {
+                    "description": "A fiddle from clj-fiddle.com",
+                    "public": true,
+                    "files": {
+                        "main.clj": {
+                            "content": code.getValue()
+                        }
+                    }
+                }
+
+                if(document.location.hash){
+                    request('patch', 'https://api.github.com/gists/'+document.location.hash.substr(2), data)
+                    .then(function(data){
+                        console.log("success", data);
+                    }).fail(function(err){
+                        console.log("failure",err);
+                    });
+                } else {
+                    request('post', 'https://api.github.com/gists', data).then(function(data){
+                        document.location.hash = '/'+data.id;
+                        console.log("success", data);
+                    }).fail(function(err){
+                        console.log("failure",err);
+                    });
+                }
+            });
+
+            $('div#separator').on('mousedown', function(e){
+
+            });
+
+            $('div#separator').on('mouseup', function(e){
+                $('div#separator').off('mousedown')
+            });            
+        }            
+
+        if(document.location.hash){
+            request('get', 'https://api.github.com/gists/'+document.location.hash.substr(2))
+            .then(function(data){
+                editors(data.files['main.clj'].content);
+            })
+        } else {
+            editors('(clojure.string/join " " (map name [:welcome :to "clj-fiddle" :!]))');
+        }
+
+
+
+    });
+    
+
+</script>
+</body>
 </html>

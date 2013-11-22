@@ -2,7 +2,25 @@ html,
 body {
 	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     height: 100%;
-    padding-top: 70px;
+    padding-top: 25px;
+}
+
+button {
+	float: right;
+	margin-top: 8px;
+margin-right: 15px;
+margin-bottom: 8px;
+}
+
+
+
+#separator {
+	height: 12px;
+	cursor: row-resize;
+	padding: 1px;
+	background: url(http://jsfiddle.net/img/handle-h.png) 50% 3px no-repeat;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
 }
 
 .error {

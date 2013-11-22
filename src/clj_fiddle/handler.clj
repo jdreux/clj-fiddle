@@ -1,14 +1,13 @@
 (ns clj-fiddle.handler
-  (:require [compojure.core :refer [defroutes]]
+  (:require [compojure.core :refer [defroutes context]]
+            [clj-fiddle.routes.api :refer [api-routes]]
             [noir.util.middleware :as middleware]
+            [ring.middleware.json :as json-middleware]
             [compojure.route :as route]
+            [compojure.handler :refer [api]]
             [taoensso.timbre :as timbre]
             [com.postspectacular.rotor :as rotor]
             [environ.core :refer [env]]))
-
-(defroutes app-routes
-  (route/resources "/")
-  (route/not-found "Not Found"))
 
 (defn init
   "init will be called once when
@@ -52,14 +51,31 @@
         (timbre/error e))))
   handler)
 
-(def app (middleware/app-handler
-           ;; add your application routes here
-           [app-routes]
-           ;; add custom middleware here
-           :middleware [wrap-error wrap-dir-index]
-           ;; add access rules here
-           :access-rules []
-           ;; serialize/deserialize the following data formats
-           ;; available formats:
-           ;; :json :json-kw :yaml :yaml-kw :edn :yaml-in-html
-           :formats [:json-kw :edn]))
+(defroutes app-routes
+  (context "/api" [] api-routes)
+  (route/resources "/")
+  (route/not-found "Not Found"))
+
+;; (def app (middleware/app-handler
+;;            ;; add your application routes here
+;;            [api-routes app-routes]
+;;            ;; add custom middleware here
+;;            :middleware [wrap-error wrap-dir-index middleware/wrap-strip-trailing-slash]
+;;            ;; add access rules here
+;;            :access-rules []
+;;            ;; serialize/deserialize the following data formats
+;;            ;; available formats:
+;;            ;; :json :json-kw :yaml :yaml-kw :edn :yaml-in-html
+;;            :formats [:json-kw :edn]))
+
+
+
+
+(def app (-> app-routes
+             wrap-error
+             api
+             json-middleware/wrap-json-body
+             json-middleware/wrap-json-params
+             json-middleware/wrap-json-response
+             wrap-dir-index
+             middleware/wrap-strip-trailing-slash))

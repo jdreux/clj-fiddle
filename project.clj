@@ -5,6 +5,7 @@
                  [lib-noir "0.7.6"]
                  [compojure "1.1.6"]
                  [ring-server "0.3.1"]
+                 [ring/ring-json "0.2.0"]
                  [com.taoensso/timbre "2.7.1"]
                  [com.postspectacular/rotor "0.1.0"]
                  [com.taoensso/tower "2.0.0"]
