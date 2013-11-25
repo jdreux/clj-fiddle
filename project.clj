@@ -10,7 +10,8 @@
                  [com.postspectacular/rotor "0.1.0"]
                  [com.taoensso/tower "2.0.0"]
                  [markdown-clj "0.9.35"]
-                 [environ "0.4.0"]]
+                 [environ "0.4.0"]
+                 [clojail "1.0.6"]]
   :aot :all
   :plugins [[lein-ring "0.8.7"]
             [lein-environ "0.4.0"]]

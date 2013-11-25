@@ -12,21 +12,19 @@ a.navbar-brand {
 	font-family: "Lucida Console", Monaco, monospace;
 }
 
-button {
+button.btn-default {
 	float: right;
 	margin-top: 8px;
-margin-right: 15px;
-margin-bottom: 8px;
+	margin-right: 15px;
+	margin-bottom: 8px;
 }
 
 #code-container .CodeMirror{
-	height: 80%;
+	height: 70%;
 }
 
 #result-container .CodeMirror{
-	height: 10%;
-	/*position: absolute;
-	bottom: 0px;*/
+	height: 20%;
 }
 
 
@@ -42,4 +40,11 @@ margin-bottom: 8px;
 
 .error {
     color: red;
+}
+
+/*CodeMirror customization:*/
+
+#code-container .CodeMirror-matchingbracket {
+	color: orange !important;
+	text-decoration: none;
 }

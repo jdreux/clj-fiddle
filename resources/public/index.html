@@ -3,6 +3,7 @@
     <title>Clojure Fiddle</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css"></link>
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css"></link>
+    <link rel="stylesheet" href="/css/font-awesome.min.css"></link>
     <link rel="stylesheet" href="/css/screen.css"></link>
     <link rel="stylesheet" href="/js/codemirror-3.19/lib/codemirror.css"></link>
     <link rel="stylesheet" href="/js/codemirror-3.19/theme/paraiso-light.css"></link>
@@ -15,19 +16,21 @@
           <a class="navbar-brand" href="#">(clj-fiddle)</a>
 
 
-          
+
 
         </div>
 
-        <button id="save" type="button" class="btn btn-default btn-sm" style="float:right">
+        <button id="run" type="button" class="btn btn-default btn-sm">
+            <span class="fa fa-github fa-lg"></span> Login
+        </button>
+
+        <button id="save" type="button" class="btn btn-default btn-sm">
             <span class="glyphicon glyphicon-save"></span> Save
           </button>
 
-        <button id="run" type="button" class="btn btn-default btn-sm" style="float:right">
+        <button id="run" type="button" class="btn btn-default btn-sm">
             <span class="glyphicon glyphicon-play"></span> Run
         </button>
-        
-
       </div>
     </div>
     <div class="">
@@ -40,6 +43,8 @@
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/codemirror-3.19/lib/codemirror.js"></script>
     <script type="text/javascript" src="/js/codemirror-3.19/mode/clojure/clojure.js"></script>
+    <script type="text/javascript" src="/js/codemirror-3.19/addon/edit/closebrackets.js"></script>
+    <script type="text/javascript" src="/js/codemirror-3.19/addon/edit/matchbrackets.js"></script>
 
     <script>
 
@@ -60,6 +65,8 @@
                 value: initial,
                 mode: 'clojure',
                 theme: 'paraiso-light',
+                matchBrackets: true,
+                autoCloseBrackets: true,
                 lineNumbers: true,
                 autofocus: true
             });
@@ -76,11 +83,16 @@
             $('button#run').click(function (){
                 request('post', '/api/eval', {code: code.getValue()}).then(function (data){
                     console.log("success", data);
-                    result.setValue(data.result || 'nil');
+                    if(data.error) {
+                        result.setValue(data.message || 'nil');
+                    } else {
+                        result.setValue(data.result || 'nil');
+                    }
+
                 }).fail(function (err){
                     console.log("failure",err);
                 })
-            }).click();
+            })//.click();
 
             $('button#save').click(function(){
                 var data = {
@@ -120,12 +132,12 @@
             //             //left: e.pageX - w / 2,
             //         })
             //     });
-            // }); 
+            // });
 
             // $('div#separator').on('mouseup', function(e){
             //     $('div#separator').off('mousemove');
-            // });            
-        }            
+            // });
+        }
 
         if(document.location.hash){
             request('get', 'https://api.github.com/gists/'+document.location.hash.substr(2))
@@ -139,7 +151,7 @@
 
 
     });
-    
+
 
 </script>
 </body>
