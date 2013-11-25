@@ -35,14 +35,12 @@
   (POST "/eval" [code] (json (with-open [out (StringWriter.)]
                                (println "Evaling" code)
                                (try
-                                 (let [sbox (make-sandbox);(sandbox secure-tester-without-def)
-                                       ;form (binding [*read-eval* false] (read-string code))
-                                       ;result (sbox form)
-                                       result (eval-string code sbox)]
-                                       ;result (sbox form {#'*out* out})]
-                                   (println "got results" out result)
-;                                   {:result [out (pr-str result)] :error false})
-                                   {:result (pr-str result)})
+                                 (let [sbox (sandbox secure-tester-without-def)
+                                       form (binding [*read-eval* false] (read-string code))
+                                       result (sbox form {#'*out* out})
+                                       response {:result (pr-str result) :stdout (.toString out)}]
+                                   (println "got results" response)
+                                   response)
                                    (catch TimeoutException _
                                      {:error true :message "Execution Timed Out!"})
                                    (catch Exception e

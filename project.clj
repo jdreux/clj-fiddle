@@ -12,6 +12,8 @@
                  [markdown-clj "0.9.35"]
                  [environ "0.4.0"]
                  [clojail "1.0.6"]]
+  :main clj-fiddle.clojail-test
+  :jvm-opts ["-Djava.security.policy=example.policy" "-Xmx80M"]
   :aot :all
   :plugins [[lein-ring "0.8.7"]
             [lein-environ "0.4.0"]]

@@ -84,15 +84,19 @@
                 request('post', '/api/eval', {code: code.getValue()}).then(function (data){
                     console.log("success", data);
                     if(data.error) {
-                        result.setValue(data.message || 'nil');
+                        result.setValue("Error: "+data.message || 'nil');
                     } else {
-                        result.setValue(data.result || 'nil');
+                        if(data.stdout){
+                            result.setValue([data.stdout, "> "+ (data.result || 'nil')].join('\n'));
+                        } else {
+                            result.setValue("> "+(data.result || 'nil'));    
+                        }
                     }
 
                 }).fail(function (err){
                     console.log("failure",err);
                 })
-            })//.click();
+            }).click();
 
             $('button#save').click(function(){
                 var data = {
