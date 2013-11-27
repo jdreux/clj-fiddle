@@ -10,39 +10,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-static-top" role="navigation">
+    <div class="navbar navbar-static-top blue" role="navigation">
         <div class="navbar-header col-sm-9">
           <a class="navbar-brand" href="#">(cl<i>j</i>-fiddle)</a>
         </div>
 
         <ul class="nav pull-right col-sm-3">
-            <li class="col-sm-3">
+            <li class="col-sm-4">
                 <a id="run" href="#" class="olive">
                     <i class="glyphicon glyphicon-play"></i> Run
                 </a>
             </li>
 
-            <li class="col-sm-3">
+            <li class="col-sm-4">
                 <a id="save" href="#" class="yellow">
                     <i class="glyphicon glyphicon-save"></i> Save
                 </a>
             </li>
 
-            <li class="col-sm-3">
-                <a id="save" href="#" class="light-blue">
+            <li class="col-sm-4">
+                <a id="comment" href="#" class="blue">
                     <i class="fa fa-comment "></i> Discuss
                 </a>
             </li>
 
-            <li class="col-sm-3">
+            <!-- <li class="col-sm-3">
                 <a id="login" href="#" class="blue">
                     <i class="fa fa-github fa-lg"></i> Login
                 </a>
-            </li>
+            </li> -->
         </ul>
 
     </div>
-    <div class="col-sm-9">
+    <div class="col-sm-9" id="code">
         <div id="code-container">
             <div class="editor-tooltip">
                 clojure
@@ -57,7 +57,11 @@
     </div>
 
     <div id="discussion" class="col-sm-3">
-        <textarea disabled="disabled">Join the dicussion</textarea>
+        <p class="text-center"><i class="fa fa-github fa-lg"></i> Please <a href="">sign in</a> to comment on this gist.</p>
+        <textarea placeholder="Join the dicussion"></textarea>
+        <p class="small text-center">
+            <small>Comments are parsed with <a href="http://github.github.com/github-flavored-markdown/" class="gfm-help" target="_blank">GitHub Flavored Markdown</a></small>
+        </p>
 
     </div>
 
@@ -86,7 +90,7 @@
             var code = CodeMirror($('#code-container')[0], {
                 value: initial,
                 mode: 'clojure',
-                theme: 'paraiso-light',
+                // theme: 'paraiso-light',
                 matchBrackets: true,
                 autoCloseBrackets: true,
                 lineNumbers: true,
@@ -148,28 +152,24 @@
                 }
             });
 
-            // $('div#separator').on('mousedown', function(e){
-            //     var //w = $(this).outerWidth(),
-            //         h = $(this).outerHeight();
-            //     $(this).on('mousemove', function(e){
-            //         //console.log(e.pageX, e.pageY);
-            //         $(this).offset({
-            //             top: e.pageY - h / 2,
-            //             //left: e.pageX - w / 2,
-            //         })
-            //     });
-            // });
-
-            // $('div#separator').on('mouseup', function(e){
-            //     $('div#separator').off('mousemove');
-            // });
+            $('a#comment').click(function(e){
+                e.preventDefault();
+                if($('#code').hasClass('col-sm-11')){
+                    $('#code').removeClass('col-sm-11').addClass('col-sm-9');
+                    $('#discussion').addClass('col-sm-3').removeClass('col-sm-1');  
+                } else {
+                    $('#code').removeClass('col-sm-9').addClass('col-sm-11');
+                    $('#discussion').addClass('col-sm-1').removeClass('col-sm-3');
+                }
+                
+            });
         }
 
         if(document.location.hash){
             request('get', 'https://api.github.com/gists/'+document.location.hash.substr(2))
             .then(function(data){
-                editors(data.files['main.clj'].content);
-            })
+                editors(data.files[Object.keys(data.files)[0]].content);
+            });
         } else {
             editors('(clojure.string/join " " (map name [:welcome :to "clj-fiddle" :!]))');
         }
