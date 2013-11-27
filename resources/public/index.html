@@ -7,36 +7,58 @@
     <link rel="stylesheet" href="/css/screen.css"></link>
     <link rel="stylesheet" href="/js/codemirror-3.19/lib/codemirror.css"></link>
     <link rel="stylesheet" href="/js/codemirror-3.19/theme/paraiso-light.css"></link>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-static-top" role="navigation">
-      <div >
-        <div class="navbar-header">
-
-          <a class="navbar-brand" href="#">(clj-fiddle)</a>
-
-
-
-
+        <div class="navbar-header col-sm-9">
+          <a class="navbar-brand" href="#">(cl<i>j</i>-fiddle)</a>
         </div>
 
-        <button id="run" type="button" class="btn btn-default btn-sm">
-            <span class="fa fa-github fa-lg"></span> Login
-        </button>
+        <ul class="nav pull-right col-sm-3">
+            <li class="col-sm-3">
+                <a id="run" href="#" class="olive">
+                    <i class="glyphicon glyphicon-play"></i> Run
+                </a>
+            </li>
 
-        <button id="save" type="button" class="btn btn-default btn-sm">
-            <span class="glyphicon glyphicon-save"></span> Save
-          </button>
+            <li class="col-sm-3">
+                <a id="save" href="#" class="yellow">
+                    <i class="glyphicon glyphicon-save"></i> Save
+                </a>
+            </li>
 
-        <button id="run" type="button" class="btn btn-default btn-sm">
-            <span class="glyphicon glyphicon-play"></span> Run
-        </button>
-      </div>
+            <li class="col-sm-3">
+                <a id="save" href="#" class="light-blue">
+                    <i class="fa fa-comment "></i> Discuss
+                </a>
+            </li>
+
+            <li class="col-sm-3">
+                <a id="login" href="#" class="blue">
+                    <i class="fa fa-github fa-lg"></i> Login
+                </a>
+            </li>
+        </ul>
+
     </div>
-    <div class="">
-        <div id="code-container"></div>
+    <div class="col-sm-9">
+        <div id="code-container">
+            <div class="editor-tooltip">
+                clojure
+            </div>
+        </div>
         <div id="separator"></div>
-        <div id="result-container"></div>
+        <div id="result-container">
+            <div class="editor-tooltip">
+                output
+            </div>
+        </div>
+    </div>
+
+    <div id="discussion" class="col-sm-3">
+        <textarea disabled="disabled">Join the dicussion</textarea>
+
     </div>
 
     <script type="text/javascript" src="/js/jquery-1.10.2.min.js"></script>
@@ -80,7 +102,7 @@
                 lineWrapping: true
             });
 
-            $('button#run').click(function (){
+            $('a#run').click(function (){
                 request('post', '/api/eval', {code: code.getValue()}).then(function (data){
                     console.log("success", data);
                     if(data.error) {
@@ -98,7 +120,7 @@
                 })
             }).click();
 
-            $('button#save').click(function(){
+            $('a#save').click(function(){
                 var data = {
                     "description": "A fiddle from clj-fiddle.com",
                     "public": true,
