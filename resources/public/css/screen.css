@@ -136,9 +136,9 @@ button.btn-default {
 	/*cursor: row-resize;*/
 	padding: 1px;
 	/*background: url(http://jsfiddle.net/img/handle-h.png) 50% 3px no-repeat;*/
-	border-top: 1px solid #ccc;
-	border-bottom: 1px solid #ccc;
-	background-color: #ccc;
+	/*border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;*/
+	background-color: #e3eaec;
 }
 
 #discussion {
@@ -151,6 +151,15 @@ button.btn-default {
    	background: #e3eaec;
 	height: 100%;
 	right: ;
+}
+
+#author {
+	display: none;
+}
+
+#author img {
+	width: 24px;
+	height: 24px;
 }
 
 #discussion textarea {

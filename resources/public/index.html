@@ -57,6 +57,16 @@
     </div>
 
     <div id="discussion" class="col-sm-3">
+        <div id="author">
+            <div>
+                <img></img>
+                <span class="name"></span> / <span class="title"></span>
+            </div>
+            <div>
+                <time></time>
+            </div>
+            <p></p>
+        </div>
         <p class="text-center"><i class="fa fa-github fa-lg"></i> Please <a href="">sign in</a> to comment on this gist.</p>
         <textarea placeholder="Join the dicussion"></textarea>
         <p class="small text-center">
@@ -167,8 +177,21 @@
 
         if(document.location.hash){
             request('get', 'https://api.github.com/gists/'+document.location.hash.substr(2))
-            .then(function(data){
-                editors(data.files[Object.keys(data.files)[0]].content);
+            .then(function(gist){
+                console.log(gist);
+                var file = gist.files[Object.keys(gist.files)[0]];
+
+                editors(file.content);
+                
+                if(gist.user) {
+                    $('#author')
+                        .find('img').attr('src', gist.user.avatar_url).end()
+                        .find('span.name').text(gist.user.login).end()
+                        .find('span.title').text(file.filename).end()
+                        .find('time').text('Last updated ' + gist.updated_at).end()
+                        .show();
+                }
+
             });
         } else {
             editors('(clojure.string/join " " (map name [:welcome :to "clj-fiddle" :!]))');
