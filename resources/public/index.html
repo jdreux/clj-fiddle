@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/css/font-awesome.min.css"></link>
     <link rel="stylesheet" href="/css/screen.css"></link>
     <link rel="stylesheet" href="/js/codemirror-3.19/lib/codemirror.css"></link>
-    <link rel="stylesheet" href="/js/codemirror-3.19/theme/paraiso-light.css"></link>
+    <link rel="stylesheet" href="/js/codemirror-3.19/theme/base16-light.css"></link>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
@@ -81,8 +81,10 @@
     <script type="text/javascript" src="/js/codemirror-3.19/mode/clojure/clojure.js"></script>
     <script type="text/javascript" src="/js/codemirror-3.19/addon/edit/closebrackets.js"></script>
     <script type="text/javascript" src="/js/codemirror-3.19/addon/edit/matchbrackets.js"></script>
+    <script type="text/javascript" src="/js/cljs.js"></script>
 
     <script>
+    return ;
 
     var request = function(method, url, data) {
         return $.ajax({
@@ -110,7 +112,7 @@
             var result = CodeMirror($('#result-container')[0], {
                 value: '',
                 mode: 'clojure',
-                theme: 'paraiso-dark',
+                theme: 'base16-light',
                 // lineNumbers: true,
                 readOnly: true,
                 lineWrapping: true
@@ -190,6 +192,13 @@
                         .find('span.title').text(file.filename).end()
                         .find('time').text('Last updated ' + gist.updated_at).end()
                         .show();
+                }
+
+                if(gist.comments) {
+                    request('get', gist.comments_url)
+                        .then(function(comments){
+                            
+                        });
                 }
 
             });
